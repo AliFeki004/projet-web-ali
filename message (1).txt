@@ -1,0 +1,134 @@
+// Définition des broches moteurs
+#define IN1 4
+#define IN2 5
+#define IN3 6
+#define IN4 7
+#define enb 9
+#define ena 3
+
+// Définition des broches des capteurs
+#define d1 19
+#define d 18
+#define c 17
+#define g1 16
+#define g 15
+
+void setup() {
+  // Configuration des broches moteurs
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(ena, OUTPUT);
+  pinMode(enb, OUTPUT);
+
+  // Configuration des broches des capteurs
+  pinMode(d1, INPUT);
+  pinMode(d, INPUT);
+  pinMode(c, INPUT);
+  pinMode(g1, INPUT);
+  pinMode(g, INPUT);
+
+  Serial.begin(9600); // Initialisation de la communication série
+}
+
+// Fonction pour avancer
+void avance() {
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+  analogWrite(ena, 150);
+  analogWrite(enb, 150);
+  
+}
+
+// Fonction pour s'arrêter
+void arrete() {
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+  analogWrite(ena, 0);
+  analogWrite(enb, 0);
+
+}
+
+// Fonction pour tourner à gauche
+void gauche() {
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+  analogWrite(ena, 100);
+  analogWrite(enb, 75);
+  
+}
+
+// Fonction pour tourner à droite
+void droite() {
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+  analogWrite(ena, 75);
+  analogWrite(enb, 100);
+ 
+}
+
+void loop() {
+  // Lecture des capteurs
+  int val_d1 = digitalRead(d1);
+  int val_d = digitalRead(d);
+  int val_c = digitalRead(c);
+  int val_g1 = digitalRead(g1);
+  int val_g = digitalRead(g);
+
+  if (val_c==0){
+    avance();
+    if (val_d1==1 && val_d==1 ){
+      droite();
+    }
+    if (val_d1==1 || val_d==1 ){
+      droite();
+    }
+
+     if (val_g1==1 || val_g==1 ){
+      gauche();
+    }
+        if (val_g1==1 && val_g==1 ){
+      gauche();
+        }
+
+    }
+  else {
+  if (val_d1==1 || val_d==1 ){
+      droite();
+    }
+        if (val_d1==1 && val_d==1 ){
+      droite();
+    }
+     if (val_g1==1 || val_g==1 ){
+      gauche();
+    }
+        if (val_g1==1 && val_g==1 ){
+      gauche();
+    }
+    if (val_d1==0 && val_d==1 && val_g==1 && val_g1==0){
+       gauche();
+    }
+  
+ }
+ 
+
+//  // Logique de contrôle
+//  if (val_c == 0 && val_d == 0 && val_d1 == 0 && val_g == 0 && val_g1 == 0) {
+//    avance();
+//  } else if (val_c == 1 || (val_g1 == 1 && val_g == 1)) {
+//    gauche();
+//  } else if (val_c == 1 || (val_d1 == 1 && val_d == 1)) {
+//    droite();
+//  } else if (val_c == 0 && val_d == 1 && val_d1 == 1 && val_g == 1 && val_g1 == 1) {
+//    arrete();
+//  }
+}
